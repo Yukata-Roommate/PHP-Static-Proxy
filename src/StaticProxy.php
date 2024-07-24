@@ -3,21 +3,21 @@
 namespace YukataRm\StaticProxy;
 
 /**
- * Calling dynamic methods statically
+ * Static Proxy
  * 
  * @package YukataRm\StaticProxy
  */
 abstract class StaticProxy
 {
     /**
-     * Get class name of call dynamic method
+     * get class name calling dynamic method
      * 
      * @return string
      */
     abstract protected static function getCallableClassName(): string;
 
     /**
-     * Call dynamic method statically
+     * call dynamic method statically
      * 
      * @param string $method
      * @param array<mixed> $parameters
@@ -25,50 +25,41 @@ abstract class StaticProxy
      */
     public static function __callStatic(string $method, array $parameters): mixed
     {
-        // get class name
         $className = static::getCallableClassName();
 
-        // if class does not exist, throw exception
-        if (!class_exists($className)) throw new \RuntimeException("Class {$className} does not exist");
+        if (!class_exists($className)) throw new \RuntimeException("class {$className} does not exist");
 
-        // get instance of class
         $instance = new $className();
 
-        // if method does not exist, throw exception
-        if (!method_exists($instance, $method)) throw new \RuntimeException("Method {$method} does not exist on class {$className}");
+        if (!method_exists($instance, $method)) throw new \RuntimeException("method {$method} does not exist on class {$className}");
 
-        // get static callable methods
-        $staticCallableMethods = static::staticCallableMethods();
+        $callableMethods = static::callableMethods();
 
-        // if method can not call, throw exception
-        if (!empty($staticCallableMethods) && !in_array($method, $staticCallableMethods)) throw new \RuntimeException("Method {$method} can not call");
+        if (!empty($callableMethods) && !in_array($method, $callableMethods)) throw new \RuntimeException("method {$method} can not call");
 
-        // get static uncallable methods
-        $staticUncallableMethods = static::staticUncallableMethods();
+        $uncallableMethods = static::uncallableMethods();
 
-        // if method can not call, throw exception
-        if (!empty($staticUncallableMethods) && in_array($method, $staticUncallableMethods)) throw new \RuntimeException("Method {$method} can not call");
+        if (!empty($uncallableMethods) && in_array($method, $uncallableMethods)) throw new \RuntimeException("method {$method} can not call");
 
-        // call dynamic method
         return $instance->$method(...$parameters);
     }
 
     /**
-     * Get static callable methods
+     * get callable methods
      * 
      * @return array<string>
      */
-    protected static function staticCallableMethods(): array
+    protected static function callableMethods(): array
     {
         return [];
     }
 
     /**
-     * Get static uncallable methods
+     * get uncallable methods
      * 
      * @return array<string>
      */
-    protected static function staticUncallableMethods(): array
+    protected static function uncallableMethods(): array
     {
         return [];
     }
