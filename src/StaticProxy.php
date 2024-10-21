@@ -4,21 +4,21 @@ namespace YukataRm\StaticProxy;
 
 /**
  * Static Proxy
- * 
+ *
  * @package YukataRm\StaticProxy
  */
 abstract class StaticProxy
 {
     /**
      * get class name calling dynamic method
-     * 
+     *
      * @return string
      */
     abstract protected static function getCallableClassName(): string;
 
     /**
      * call dynamic method statically
-     * 
+     *
      * @param string $method
      * @param array<mixed> $parameters
      * @return mixed
@@ -46,7 +46,7 @@ abstract class StaticProxy
 
     /**
      * get callable methods
-     * 
+     *
      * @return array<string>
      */
     protected static function callableMethods(): array
@@ -56,7 +56,7 @@ abstract class StaticProxy
 
     /**
      * get uncallable methods
-     * 
+     *
      * @return array<string>
      */
     protected static function uncallableMethods(): array
